@@ -9,8 +9,9 @@
                 @dragstart="startDrag($event, item, index)"
                 @dragend="dragLeave()"
                 @drop="dragEnd($event, index)"
-                @dragover.prevent
+                @dragover.prevent="enterCheck(true)"
                 @dragenter.prevent
+                @dragleave="enterCheck(false)"
                 class="drag-box"
                 :class="{ 
                     'is-dragging': sIsDragging && (item.id === sDraggingId),
@@ -28,7 +29,7 @@
                 @dragend="dragLeave()"
                 @drop="dragEnd($event, 0)"
                 @dragover.prevent
-                @dragenter.prevent    
+                @dragenter.prevent
                 class="drag-box is-dragging"></div>
         </div>
     </div>
@@ -52,11 +53,12 @@ export default {
             sOverShow: false,
             sCustomDiv: null,
             sListId: null,
+            sEnterDragzone: false,
         }
     },
     methods: {
         startDrag(event, aItem, aIdx) {
-            console.log('start drag dropzone', this.pDropzoneId)
+            console.log('start drag dropzone', this.pDropzoneId);
             event.dataTransfer.dropEffect = 'move';
             event.dataTransfer.effectAllowed = 'move';
             event.dataTransfer.setData('itemId', aItem.id);
@@ -68,7 +70,7 @@ export default {
             sCustomDiv.className = "drag-box "+aIdx+" "+aItem.id;
             document.body.appendChild(sCustomDiv);
             event.dataTransfer.setDragImage(sCustomDiv, event.offsetX, event.offsetY);
-            this.sCustomDiv = sCustomDiv
+            this.sCustomDiv = sCustomDiv;
 
             this.sDraggingId = aItem.id;
             this.sFrom = aIdx;
@@ -76,7 +78,7 @@ export default {
         },
         dragEnd(event, aTo) {
             event.preventDefault();
-            console.log('drag end dropzone', this.pDropzoneId)
+            console.log('drag end dropzone', this.pDropzoneId);
 
             const sCustomDiv = document.getElementById('customdiv').cloneNode(true);
             sCustomDiv.id = sCustomDiv.className.split(' ')[2];
@@ -96,7 +98,9 @@ export default {
             if(this.sCustomDiv){
                 document.body.removeChild(this.sCustomDiv);
                 //여기서 삭제해버리자~
-                this.tempList.splice(this.sFrom, 1)
+                if(this.sEnterDragzone) {
+                    this.tempList.splice(this.sFrom, 1);
+                }
                 this.sCustomDiv = null;
             }
             this.sFrom = -1;
@@ -143,8 +147,12 @@ export default {
             return false;
         },
         isOver(aId) {
+            // console.log('isOver func = ', this.sOverId, this.sDraggingId)
             return this.sOverShow && (aId === this.sOverId) && (aId !== this.sDraggingId);
         },
+        enterCheck(aBool) {
+            this.sEnterDragzone = aBool;
+        }
     },
     created() {
         return this.tempList = this.pList
