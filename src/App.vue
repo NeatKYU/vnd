@@ -4,6 +4,7 @@
     <div class="flex-style">
       <Drag :pDropzoneId="1" :pList="list1"></Drag>
       <Drag :pDropzoneId="2" :pList="list2"></Drag>
+      <Drag :pDropzoneId="3" :pList="list3"></Drag>
     </div>
   </div>
 </template>
@@ -63,7 +64,30 @@ export default {
           title: 'item J',
           list: 2,
         },
-      ]
+      ],
+      list3: [
+        {
+          id: '11',
+          title: 'item K',
+          list: 2,
+        },{
+          id: '12',
+          title: 'item L',
+          list: 2,
+        },{
+          id: '13',
+          title: 'item M',
+          list: 2,
+        },{
+          id: '14',
+          title: 'item N',
+          list: 2,
+        },{
+          id: '15',
+          title: 'item O',
+          list: 2,
+        },
+      ],
     };
   }
 }

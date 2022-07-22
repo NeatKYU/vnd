@@ -21,6 +21,15 @@
                 <!-- <div v-if="sOverShow && (item.id === sOverId) && (item.id !== sDraggingId)" class="move-point" /> -->
                 <span>{{ item.title }}</span>
             </div>
+            <div 
+                v-if="this.tempList.length === 0"
+                draggable
+                @dragstart="startDrag($event, item, 0)"
+                @dragend="dragLeave()"
+                @drop="dragEnd($event, 0)"
+                @dragover.prevent
+                @dragenter.prevent    
+                class="drag-box is-dragging"></div>
         </div>
     </div>
 </template>
